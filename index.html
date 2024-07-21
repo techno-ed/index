@@ -344,12 +344,14 @@
             renderCards(filteredCards);
         }
 
+        let isDetailOpen = false;
+
         function openDetail(card) {
             const detailPage = document.getElementById('detail-page');
             const detailContent = document.getElementById('detail-content');
             let detailHtml = `
                 <h2>编号：${card.id}</h2>
-                <img src="${card.preview}" alt="房屋预览图" style="width: 100%; height: 100%; object-fit: cover; margin-bottom: 15px;">
+                <img src="${card.preview}" alt="预览图" style="width: 100%; height: 100%; object-fit: cover; margin-bottom: 15px;">
                 <p><strong>简介：</strong> ${card.simpleInfo}</p>
                 <p><strong>价格：</strong> ￥${card.price.toFixed(2)}</p>
                 <p><strong>地区：</strong> ${card.location}</p>
@@ -378,12 +380,23 @@
             if (window.innerWidth > 768) {
                 document.querySelector('.main-content').style.width = '70%';
             }
+            // 添加历史记录状态
+            if (!isDetailOpen) {
+                history.pushState({ isDetail: true }, '');
+                isDetailOpen = true;
+            }
         }
 
         function closeDetail() {
             const detailPage = document.getElementById('detail-page');
             detailPage.classList.remove('open');
             document.querySelector('.main-content').style.width = '100%';
+
+            // 移除历史记录状态
+            if (isDetailOpen) {
+                history.back();
+                isDetailOpen = false;
+            }
         }
 
         function toggleSort() {
@@ -407,6 +420,21 @@
         // 阻止详情页内部点击事件冒泡
         document.getElementById('detail-page').addEventListener('click', function(event) {
             event.stopPropagation();
+        });
+
+        // 监听 popstate 事件
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.isDetail) {
+                // 如果是详情页状态，不做任何操作
+            } else {
+                // 如果不是详情页状态，关闭详情页
+                const detailPage = document.getElementById('detail-page');
+                if (detailPage.classList.contains('open')) {
+                    detailPage.classList.remove('open');
+                    document.querySelector('.main-content').style.width = '100%';
+                    isDetailOpen = false;
+                }
+            }
         });
     </script>
 </body>
