@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh">
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?2472ef3603b334b2cdc8d2109cd5c9ab";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -384,6 +395,11 @@
             if (!isDetailOpen) {
                 history.pushState({ isDetail: true }, '');
                 isDetailOpen = true;
+            }
+
+             // 手动发送 PV 统计
+            if (window._hmt) {
+                _hmt.push(['_trackPageview', '/detail/' + card.id]);
             }
         }
 
